@@ -22,3 +22,6 @@ go.work
 
 # Go build
 go-math-quiz
+
+# Generated files by program
+generated_tasks*
