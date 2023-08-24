@@ -19,8 +19,8 @@ type quizTask struct {
 func main() {
 	options := quizOptions{}
 	loadFlagOptions(&options)
-	tasks := prepareQuizForOptions(options)
-	log.Println(tasks)
+	tasks := prepareQuiz(options)
+	runQuiz(tasks, options)
 }
 
 func loadFlagOptions(options *quizOptions) {
@@ -30,7 +30,7 @@ func loadFlagOptions(options *quizOptions) {
 	flag.Parse()
 }
 
-func prepareQuizForOptions(options quizOptions) []quizTask {
+func prepareQuiz(options quizOptions) []quizTask {
 	if *options.filePath != "" {
 		return readTasks(*options.filePath)
 	}
@@ -40,7 +40,7 @@ func prepareQuizForOptions(options quizOptions) []quizTask {
 	}
 
 	tasks := generateTasks(options)
-	log.Printf("Generated tasks (level %d) saved to '%s', feel free to check them out later on (or cheat, no one will know ;) )!", *options.level, saveTasks(tasks))
+	log.Printf("Generated tasks (level %d) saved to '%s', feel free to check them out later on (or cheat, no one will know 😉 )!", *options.level, saveTasks(tasks))
 	return tasks
 }
 
