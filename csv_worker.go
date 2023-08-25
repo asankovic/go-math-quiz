@@ -2,11 +2,16 @@ package main
 
 import (
 	"encoding/csv"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strings"
 	"time"
 )
+
+const questionFormat = "^\\d+[\\+\\-\\*%]\\d+=$"
 
 func saveTasks(tasks []quizTask) (file string) {
 	csvFile, err := os.Create(fmt.Sprintf("generated_tasks_%d.csv", time.Now().UnixMilli()))
@@ -46,10 +51,20 @@ func readTasks(fileName string) []quizTask {
 func createTasks(data [][]string) []quizTask {
 	tasks := make([]quizTask, len(data))
 	for i, row := range data {
+		error := validateQuestionFormat(row[0])
+		checkFatalErr(error, "Question format not valid, unable to proceed with reading provided data!")
 		tasks[i] = quizTask{
 			question: row[0],
-			answer:   row[1],
+			answer:   strings.TrimSpace(row[1]),
 		}
 	}
 	return tasks
+}
+
+func validateQuestionFormat(question string) error {
+	match, _ := regexp.MatchString(questionFormat, question)
+	if !match {
+		return errors.New(fmt.Sprintf("Question '%s' does not match the given format '<number> (+ | - | * | %%) <number> ='!", question))
+	}
+	return nil
 }

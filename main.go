@@ -59,12 +59,12 @@ func prepareQuiz(options quizOptions) []quizTask {
 
 func checkErr(err error, msg string) {
 	if err != nil {
-		log.Print(msg)
+		log.Printf("%s: %v", msg, err)
 	}
 }
 
 func checkFatalErr(err error, msg string) {
 	if err != nil {
-		log.Fatal(msg)
+		log.Fatalf("%s: %v", msg, err)
 	}
 }
